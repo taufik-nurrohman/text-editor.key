@@ -4,10 +4,9 @@
   "bugs": "https://github.com/taufik-nurrohman/text-editor.key/issues",
   "dependencies": {
     "@taufik-nurrohman/event": "*",
-    "@taufik-nurrohman/from": "*",
-    "@taufik-nurrohman/is": "*",
+    "@taufik-nurrohman/key": "*",
     "@taufik-nurrohman/text-editor": "*",
-    "@taufik-nurrohman/to": "*"
+    "@taufik-nurrohman/tick": "*"
   },
   "description": "Provides a feature to easily interact with the keyboard keys.",
   "devDependencies": {

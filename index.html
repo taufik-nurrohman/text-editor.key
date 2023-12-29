@@ -64,18 +64,31 @@
       <h1>Text Editor Key 1.0.0</h1>
       <p>Key extension for <a href="../text-editor/index.html">text editor</a>.</p>
       <hr>
-      <p>Provides a feature to get cursor position and selection dimension in pixels.</p>
+      <p>Provides a feature to easily interact with the keyboard keys.</p>
     </header>
     <main>
       <p><textarea spellcheck="false">abcdef</textarea></p>
+      <p>Try to press <kbd>Control-b</kbd> or <kbd>Control-i</kbd> in the text area above!</p>
       <h2>Usage</h2>
       <h4>Browser</h4>
       <pre><code>&lt;script src="<a href="../text-editor/index.min.js" target="_blank">./text-editor/index.min.js</a>"&gt;&lt;/script&gt;
 &lt;script src="<a href="index.min.js" target="_blank">./text-editor.key/index.min.js</a>"&gt;&lt;/script&gt;
 &lt;script&gt;
+
   const editor = new TextEditor(document.querySelector('textarea'), {
       with: [TextEditor.Key]
   });
+
+  editor.command('italic', function () {
+      return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
+  });
+
+  editor.key('Control-b', function () {
+      return this.wrap('&lt;b&gt;', '&lt;/b&gt;'), false;
+  });
+
+  editor.key('Control-i', 'italic');
+
 &lt;/script&gt;</code></pre>
       <h4>CommonJS</h4>
       <pre><code>const TextEditor = require('@taufik-nurrohman/text-editor').default;
@@ -85,7 +98,17 @@ TextEditor.state.with.push(Key); // Load as a core extension
 
 const editor = new TextEditor(document.querySelector('textarea'), {
     with: [Key] // Load as an optional extension
-});</code></pre>
+});
+
+editor.command('italic', function () {
+    return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
+});
+
+editor.key('Control-b', function () {
+    return this.wrap('&lt;b&gt;', '&lt;/b&gt;'), false;
+});
+
+editor.key('Control-i', 'italic');</code></pre>
       <h4>ECMAScript</h4>
       <pre><code>import TextEditor from '@taufik-nurrohman/text-editor';
 import Key from '@taufik-nurrohman/text-editor.key';
@@ -94,11 +117,25 @@ TextEditor.state.with.push(Key); // Load as a core extension
 
 const editor = new TextEditor(document.querySelector('textarea'), {
     with: [Key] // Load as an optional extension
-});</code></pre>
+});
+
+editor.command('italic', function () {
+    return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
+});
+
+editor.key('Control-b', function () {
+    return this.wrap('&lt;b&gt;', '&lt;/b&gt;'), false;
+});
+
+editor.key('Control-i', 'italic');</code></pre>
       <h2>Examples</h2>
       <p>TODO</p>
       <h2>Methods and Properties</h2>
+      <h3>editor.command(command, of)</h3>
+      <p>TODO</p>
       <h3>editor.commands</h3>
+      <p>TODO</p>
+      <h3>editor.key(key, of)</h3>
       <p>TODO</p>
       <h3>editor.keys</h3>
       <p>TODO</p>
@@ -113,6 +150,14 @@ const editor = new TextEditor(document.querySelector('textarea'), {
       const editor = new TextEditor(document.querySelector('textarea'), {
           with: [TextEditor.Key]
       });
+      editor.command('bold', function () {
+          return this.wrap('<b>', '</b>'), false;
+      });
+      editor.command('italic', function () {
+          return this.wrap('<i>', '</i>'), false;
+      });
+      editor.key('Control-b', 'bold');
+      editor.key('Control-i', 'italic');
     </script>
   </body>
 </html>
