@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="Provides a feature to easily interact with the keyboard keys." name="description">
+    <title>Text Editor Key 1.0.0</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        background: #fff;
+        border-top: 4px solid;
+        color: #000;
+        font: normal normal 16px/1.25 serif;
+      }
+      a {
+        color: #009;
+        text-decoration: none;
+      }
+      a,
+      code {
+        word-wrap: break-word;
+      }
+      code {
+        font-family: monospace;
+        font-size: 80%;
+      }
+      footer,
+      header,
+      main,
+      nav {
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      hr {
+        border: 0;
+        border-top: 1px dashed;
+        color: inherit;
+        height: 0;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      pre code {
+        background: #eee;
+        display: block;
+        padding: 1em;
+      }
+      table {
+        width: 100%;
+      }
+      td,
+      th {
+        text-align: left;
+        vertical-align: top;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Text Editor Key 1.0.0</h1>
+      <p>Key extension for <a href="../text-editor/index.html">text editor</a>.</p>
+      <hr>
+      <p>Provides a feature to get cursor position and selection dimension in pixels.</p>
+    </header>
+    <main>
+      <p><textarea spellcheck="false">abcdef</textarea></p>
+      <h2>Usage</h2>
+      <h4>Browser</h4>
+      <pre><code>&lt;script src="<a href="../text-editor/index.min.js" target="_blank">./text-editor/index.min.js</a>"&gt;&lt;/script&gt;
+&lt;script src="<a href="index.min.js" target="_blank">./text-editor.key/index.min.js</a>"&gt;&lt;/script&gt;
+&lt;script&gt;
+  const editor = new TextEditor(document.querySelector('textarea'), {
+      with: [TextEditor.Key]
+  });
+&lt;/script&gt;</code></pre>
+      <h4>CommonJS</h4>
+      <pre><code>const TextEditor = require('@taufik-nurrohman/text-editor').default;
+const Key = require('@taufik-nurrohman/text-editor.key').default;
+
+TextEditor.state.with.push(Key); // Load as a core extension
+
+const editor = new TextEditor(document.querySelector('textarea'), {
+    with: [Key] // Load as an optional extension
+});</code></pre>
+      <h4>ECMAScript</h4>
+      <pre><code>import TextEditor from '@taufik-nurrohman/text-editor';
+import Key from '@taufik-nurrohman/text-editor.key';
+
+TextEditor.state.with.push(Key); // Load as a core extension
+
+const editor = new TextEditor(document.querySelector('textarea'), {
+    with: [Key] // Load as an optional extension
+});</code></pre>
+      <h2>Examples</h2>
+      <p>TODO</p>
+      <h2>Methods and Properties</h2>
+      <h3>editor.commands</h3>
+      <p>TODO</p>
+      <h3>editor.keys</h3>
+      <p>TODO</p>
+    </main>
+    <footer>
+      <hr>
+      <p>&copy; 2023 <a href="/">Taufik Nurrohman</a></p>
+    </footer>
+    <script src="../text-editor/index.min.js"></script>
+    <script src="index.min.js"></script>
+    <script>
+      const editor = new TextEditor(document.querySelector('textarea'), {
+          with: [TextEditor.Key]
+      });
+    </script>
+  </body>
+</html>

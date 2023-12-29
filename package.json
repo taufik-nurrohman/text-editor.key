@@ -1,0 +1,49 @@
+{
+  "author": "Taufik Nurrohman",
+  "browser": "index.min.js",
+  "bugs": "https://github.com/taufik-nurrohman/text-editor.key/issues",
+  "dependencies": {
+    "@taufik-nurrohman/document": "*",
+    "@taufik-nurrohman/event": "*",
+    "@taufik-nurrohman/from": "*",
+    "@taufik-nurrohman/is": "*",
+    "@taufik-nurrohman/to": "*"
+  },
+  "description": "Provides a feature to easily interact with the keyboard keys.",
+  "devDependencies": {
+    "@taufik-nurrohman/factory": "*"
+  },
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "index.min.js",
+    "index.mjs"
+  ],
+  "funding": {
+    "url": "https://paypal.me/tatautaufik"
+  },
+  "homepage": "https://taufik-nurrohman.js.org/text-editor.key",
+  "keywords": [
+    "command",
+    "editor",
+    "extension",
+    "key",
+    "keyboard",
+    "text"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "module": "index.mjs",
+  "name": "@taufik-nurrohman/text-editor.key",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/text-editor.key.git"
+  },
+  "scripts": {
+    "pack": "pack --clean=false --from=.factory --js-format=umd --js-name=TextEditor.Key --js-top='%(js.license)' --mjs=true --to=."
+  },
+  "version": "1.0.0"
+}

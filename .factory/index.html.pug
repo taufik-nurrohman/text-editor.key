@@ -1,0 +1,111 @@
+extends _index.pug
+
+block state
+  - const title = 'Text Editor Key ' + version
+  - const scripts = ['../text-editor/index.min.js', 'index.min.js']
+
+block script
+  script
+    | const editor = new TextEditor(document.querySelector('textarea'), {
+    |     with: [TextEditor.Key]
+    | });
+
+block style
+  style
+    | * {
+    |   box-sizing: border-box;
+    | }
+    | :root {
+    |   background: #fff;
+    |   border-top: 4px solid;
+    |   color: #000;
+    |   font: normal normal 16px/1.25 serif;
+    | }
+    | a {
+    |   color: #009;
+    |   text-decoration: none;
+    | }
+    | a, code {
+    |   word-wrap: break-word;
+    | }
+    | code {
+    |   font-family: monospace;
+    |   font-size: 80%;
+    | }
+    | footer, header, main, nav {
+    |   margin: 0 auto;
+    |   max-width: 700px;
+    | }
+    | hr {
+    |   border: 0;
+    |   border-top: 1px dashed;
+    |   color: inherit;
+    |   height: 0;
+    | }
+    | pre {
+    |   white-space: pre-wrap;
+    |   word-wrap: break-word;
+    | }
+    | pre code {
+    |   background: #eee;
+    |   display: block;
+    |   padding: 1em;
+    | }
+    | table {
+    |   width: 100%;
+    | }
+    | td, th {
+    |   text-align: left;
+    |   vertical-align: top;
+    | }
+
+block content
+  header
+    h1= title
+    p Key extension for #[a(href='../text-editor/index.html') text editor].
+    hr
+    p Provides a feature to get cursor position and selection dimension in pixels.
+  main
+    p: textarea(spellcheck='false') abcdef
+    h2 Usage
+    h4 Browser
+    pre: code
+      | &lt;script src="#[a(href='../text-editor/index.min.js' target='_blank') ./text-editor/index.min.js]"&gt;&lt;/script&gt;
+      | &lt;script src="#[a(href='index.min.js' target='_blank') ./text-editor.key/index.min.js]"&gt;&lt;/script&gt;
+      | &lt;script&gt;
+      |   const editor = new TextEditor(document.querySelector('textarea'), {
+      |       with: [TextEditor.Key]
+      |   });
+      | &lt;/script&gt;
+    h4 CommonJS
+    pre: code
+      | const TextEditor = require('@taufik-nurrohman/text-editor').default;
+      | const Key = require('@taufik-nurrohman/text-editor.key').default;
+      |
+      | TextEditor.state.with.push(Key); // Load as a core extension
+      |
+      | const editor = new TextEditor(document.querySelector('textarea'), {
+      |     with: [Key] // Load as an optional extension
+      | });
+    h4 ECMAScript
+    pre: code
+      | import TextEditor from '@taufik-nurrohman/text-editor';
+      | import Key from '@taufik-nurrohman/text-editor.key';
+      |
+      | TextEditor.state.with.push(Key); // Load as a core extension
+      |
+      | const editor = new TextEditor(document.querySelector('textarea'), {
+      |     with: [Key] // Load as an optional extension
+      | });
+    h2 Examples
+    p TODO
+    h2 Methods and Properties
+    h3 editor.commands
+    p TODO
+    h3 editor.keys
+    p TODO
+  footer
+    hr
+    p
+      != '&copy; ' + year + ' '
+      a(href='/') Taufik Nurrohman
