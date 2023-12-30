@@ -4,7 +4,7 @@ block state
   - const scripts = ['../text-editor/index.min.js', 'index.min.js']
   - const styles = ['../layout/index.min.css']
   - const theme = '#000'
-  - const title = 'Text Editor: Key ' + version
+  - const title = 'Key ' + version
 
 block script
   script
@@ -24,10 +24,6 @@ block script
 
 block style
   style
-    | :root {
-    |   border-top: 5px solid #00f;
-    | }
-    |
     | @media (min-width: 45rem) {
     |   :root {
     |     padding-bottom: 3rem;
@@ -43,7 +39,7 @@ block style
 block content
   header
     h1= title
-    p Key extension for #[a(href='../text-editor/index.html') text editor].
+    p Key extension for #[a(href='../text-editor/index.html') Text Editor].
     hr
     p Provides a feature to easily interact with the keyboard keys.
   main
@@ -52,7 +48,7 @@ block content
         'display': 'block',
         'width': '100%'
       }) abcdef
-    p Try to press #[kbd Control-b] or #[kbd Control-i] in the text area above!
+    p(role='note') Try to press #[kbd Control-b] or #[kbd Control-i] in the text area above!
     h2 Usage
     h4 Browser
     pre: code
