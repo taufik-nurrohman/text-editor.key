@@ -2,72 +2,38 @@
 <html dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta content="#000" name="theme-color">
     <meta content="width=device-width" name="viewport">
     <meta content="Provides a feature to easily interact with the keyboard keys." name="description">
-    <title>Text Editor Key 1.0.0</title>
+    <title>Text Editor: Key 1.0.0</title>
+    <link href="../layout/index.min.css" rel="stylesheet">
     <style>
-      * {
-        box-sizing: border-box;
-      }
       :root {
-        background: #fff;
-        border-top: 4px solid;
-        color: #000;
-        font: normal normal 16px/1.25 serif;
+        border-top: 5px solid #00f;
       }
-      a {
-        color: #009;
-        text-decoration: none;
-      }
-      a,
-      code {
-        word-wrap: break-word;
-      }
-      code {
-        font-family: monospace;
-        font-size: 80%;
-      }
-      footer,
-      header,
-      main,
-      nav {
-        margin: 0 auto;
-        max-width: 700px;
-      }
-      hr {
-        border: 0;
-        border-top: 1px dashed;
-        color: inherit;
-        height: 0;
-      }
-      pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-      }
-      pre code {
-        background: #eee;
-        display: block;
-        padding: 1em;
-      }
-      table {
-        width: 100%;
-      }
-      td,
-      th {
-        text-align: left;
-        vertical-align: top;
+
+      @media (min-width: 45rem) {
+        :root {
+          padding-bottom: 3rem;
+          padding-top: 3rem;
+        }
+        body > * {
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 45rem;
+        }
       }
     </style>
   </head>
   <body>
     <header>
-      <h1>Text Editor Key 1.0.0</h1>
+      <h1>Text Editor: Key 1.0.0</h1>
       <p>Key extension for <a href="../text-editor/index.html">text editor</a>.</p>
       <hr>
       <p>Provides a feature to easily interact with the keyboard keys.</p>
     </header>
     <main>
-      <p><textarea spellcheck="false">abcdef</textarea></p>
+      <p><textarea spellcheck="false" style="display:block;width:100%;">abcdef</textarea></p>
       <p>Try to press <kbd>Control-b</kbd> or <kbd>Control-i</kbd> in the text area above!</p>
       <h2>Usage</h2>
       <h4>Browser</h4>
@@ -79,65 +45,65 @@
       with: [TextEditor.Key]
   });
 
-  editor.command('italic', function () {
-      return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
-  });
-
-  editor.key('Control-b', function () {
+  editor.command('bold', function () {
       return this.wrap('&lt;b&gt;', '&lt;/b&gt;'), false;
   });
 
-  editor.key('Control-i', 'italic');
+  editor.key('Control-b', 'bold');
+
+  editor.key('Control-i', function () {
+      return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
+  });
 
 &lt;/script&gt;</code></pre>
       <h4>CommonJS</h4>
       <pre><code>const TextEditor = require('@taufik-nurrohman/text-editor').default;
-const Key = require('@taufik-nurrohman/text-editor.key').default;
+const TextEditorKey = require('@taufik-nurrohman/text-editor.key').default;
 
-TextEditor.state.with.push(Key); // Load as a core extension
+TextEditor.state.with.push(TextEditorKey); // Load as a core extension
 
 const editor = new TextEditor(document.querySelector('textarea'), {
-    with: [Key] // Load as an optional extension
+    with: [TextEditorKey] // Load as an optional extension
 });
 
-editor.command('italic', function () {
-    return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
-});
-
-editor.key('Control-b', function () {
+editor.command('bold', function () {
     return this.wrap('&lt;b&gt;', '&lt;/b&gt;'), false;
 });
 
-editor.key('Control-i', 'italic');</code></pre>
+editor.key('Control-b', 'bold');
+
+editor.key('Control-i', function () {
+    return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
+});</code></pre>
       <h4>ECMAScript</h4>
       <pre><code>import TextEditor from '@taufik-nurrohman/text-editor';
-import Key from '@taufik-nurrohman/text-editor.key';
+import TextEditorKey from '@taufik-nurrohman/text-editor.key';
 
-TextEditor.state.with.push(Key); // Load as a core extension
+TextEditor.state.with.push(TextEditorKey); // Load as a core extension
 
 const editor = new TextEditor(document.querySelector('textarea'), {
-    with: [Key] // Load as an optional extension
+    with: [TextEditorKey] // Load as an optional extension
 });
 
-editor.command('italic', function () {
-    return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
-});
-
-editor.key('Control-b', function () {
+editor.command('bold', function () {
     return this.wrap('&lt;b&gt;', '&lt;/b&gt;'), false;
 });
 
-editor.key('Control-i', 'italic');</code></pre>
+editor.key('Control-b', 'bold');
+
+editor.key('Control-i', function () {
+    return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
+});</code></pre>
       <h2>Examples</h2>
       <p>TODO</p>
       <h2>Methods and Properties</h2>
-      <h3>editor.command(command, of)</h3>
+      <h3><code>editor.command(command, of)</code></h3>
       <p>TODO</p>
-      <h3>editor.commands</h3>
+      <h3><code>editor.commands</code></h3>
       <p>TODO</p>
-      <h3>editor.key(key, of)</h3>
+      <h3><code>editor.key(key, of)</code></h3>
       <p>TODO</p>
-      <h3>editor.keys</h3>
+      <h3><code>editor.keys</code></h3>
       <p>TODO</p>
     </main>
     <footer>
@@ -153,11 +119,10 @@ editor.key('Control-i', 'italic');</code></pre>
       editor.command('bold', function () {
           return this.wrap('<b>', '</b>'), false;
       });
-      editor.command('italic', function () {
+      editor.key('Control-b', 'bold');
+      editor.key('Control-i', function () {
           return this.wrap('<i>', '</i>'), false;
       });
-      editor.key('Control-b', 'bold');
-      editor.key('Control-i', 'italic');
     </script>
   </body>
 </html>

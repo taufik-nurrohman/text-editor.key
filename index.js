@@ -36,14 +36,64 @@
     var isFunction = function isFunction(x) {
         return 'function' === typeof x;
     };
+    var isInstance = function isInstance(x, of) {
+        return x && isSet(of) && x instanceof of ;
+    };
     var isNull = function isNull(x) {
         return null === x;
+    };
+    var isObject = function isObject(x, isPlain) {
+        if (isPlain === void 0) {
+            isPlain = true;
+        }
+        if ('object' !== typeof x) {
+            return false;
+        }
+        return isPlain ? isInstance(x, Object) : true;
     };
     var isSet = function isSet(x) {
         return isDefined(x) && !isNull(x);
     };
     var isString = function isString(x) {
         return 'string' === typeof x;
+    };
+    var hasValue = function hasValue(x, data) {
+        return -1 !== data.indexOf(x);
+    };
+    var fromStates = function fromStates() {
+        for (var _len = arguments.length, lot = new Array(_len), _key = 0; _key < _len; _key++) {
+            lot[_key] = arguments[_key];
+        }
+        var out = lot.shift();
+        for (var i = 0, j = toCount(lot); i < j; ++i) {
+            for (var k in lot[i]) {
+                // Assign value
+                if (!isSet(out[k])) {
+                    out[k] = lot[i][k];
+                    continue;
+                }
+                // Merge array
+                if (isArray(out[k]) && isArray(lot[i][k])) {
+                    out[k] = [ /* Clone! */ ].concat(out[k]);
+                    for (var ii = 0, jj = toCount(lot[i][k]); ii < jj; ++ii) {
+                        if (!hasValue(lot[i][k][ii], out[k])) {
+                            out[k].push(lot[i][k][ii]);
+                        }
+                    }
+                    // Merge object recursive
+                } else if (isObject(out[k]) && isObject(lot[i][k])) {
+                    out[k] = fromStates({
+                        /* Clone! */ }, out[k], lot[i][k]);
+                    // Replace value
+                } else {
+                    out[k] = lot[i][k];
+                }
+            }
+        }
+        return out;
+    };
+    var toCount = function toCount(x) {
+        return x.length;
     };
     var toObjectKeys = function toObjectKeys(x) {
         return Object.keys(x);
@@ -158,8 +208,8 @@
         $.key = function (key, of) {
             return $.keys[key] = of, $;
         };
-        $.commands = map.commands;
-        $.keys = map.keys;
+        $.commands = fromStates(map.commands, $.state.commands || {});
+        $.keys = fromStates(map.keys, $.state.keys || {});
         onEvent('blur', self, onBlur);
         onEvent('input', self, onInput);
         onEvent('keydown', self, onKeyDown);

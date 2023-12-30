@@ -1,5 +1,6 @@
 import Key from '@taufik-nurrohman/key';
 import {debounce} from '@taufik-nurrohman/tick';
+import {fromStates} from '@taufik-nurrohman/from';
 import {onEvent, offEvent, offEventDefault} from '@taufik-nurrohman/event';
 
 function onBlur(e) {
@@ -37,8 +38,8 @@ function attach(self) {
     $.key = function (key, of) {
         return ($.keys[key] = of), $;
     };
-    $.commands = map.commands;
-    $.keys = map.keys;
+    $.commands = fromStates(map.commands, $.state.commands || {});
+    $.keys = fromStates(map.keys, $.state.keys || {});
     onEvent('blur', self, onBlur);
     onEvent('input', self, onInput);
     onEvent('keydown', self, onKeyDown);
