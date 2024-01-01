@@ -90,21 +90,30 @@ editor.key('Control-b', 'bold');
 editor.key('Control-i', function () {
     return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
 });</code></pre>
-      <h2>Examples</h2>
-      <p>TODO</p>
       <h2>Methods and Properties</h2>
       <h3><code>editor.command(command, of)</code></h3>
-      <p>TODO</p>
+      <p>Add a command to be used later by the <code>editor.key()</code> method.</p>
+      <pre><code>editor.command('bold', function () {
+    this.wrap('&lt;b&gt;', '&lt;/b&gt;');
+    return false; // Prevent normal keyboard behavior by returning `false`
+});</code></pre>
       <h3><code>editor.commands</code></h3>
-      <p>TODO</p>
+      <p>List of commands.</p>
+      <pre><code>console.log(editor.commands);</code></pre>
       <h3><code>editor.key(key, of)</code></h3>
-      <p>TODO</p>
+      <p>Add a command that will be executed when a certain keyboard key combination is pressed.</p>
+      <pre><code>editor.key('Control-b', 'bold'); // This will execute `editor.commands.bold()` if exists</code></pre>
+      <pre><code>editor.key('Control-b', function () {
+    this.wrap('&lt;b&gt;', '&lt;/b&gt;');
+    return false; // Prevent normal keyboard behavior by returning `false`
+});</code></pre>
       <h3><code>editor.keys</code></h3>
-      <p>TODO</p>
+      <p>List of keyboard key combinations and their commands.</p>
+      <pre><code>console.log(editor.keys);</code></pre>
     </main>
     <footer>
       <hr>
-      <p>&copy; 2023 <a href="/">Taufik Nurrohman</a></p>
+      <p>&copy; 2024 <a href="/">Taufik Nurrohman</a></p>
     </footer>
     <script src="../text-editor/index.min.js"></script>
     <script src="index.min.js"></script>

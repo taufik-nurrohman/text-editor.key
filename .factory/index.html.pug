@@ -111,17 +111,31 @@ block content
       | editor.key('Control-i', function () {
       |     return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
       | });
-    h2 Examples
-    p TODO
     h2 Methods and Properties
     h3: code editor.command(command, of)
-    p TODO
+    p Add a command to be used later by the #[code editor.key()] method.
+    pre: code
+      | editor.command('bold', function () {
+      |     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
+      |     return false; // Prevent normal keyboard behavior by returning `false`
+      | });
     h3: code editor.commands
-    p TODO
+    p List of commands.
+    pre: code
+      | console.log(editor.commands);
     h3: code editor.key(key, of)
-    p TODO
+    p Add a command that will be executed when a certain keyboard key combination is pressed.
+    pre: code
+      | editor.key('Control-b', 'bold'); // This will execute `editor.commands.bold()` if exists
+    pre: code
+      | editor.key('Control-b', function () {
+      |     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
+      |     return false; // Prevent normal keyboard behavior by returning `false`
+      | });
     h3: code editor.keys
-    p TODO
+    p List of keyboard key combinations and their commands.
+    pre: code
+      | console.log(editor.keys);
   footer
     hr
     p
