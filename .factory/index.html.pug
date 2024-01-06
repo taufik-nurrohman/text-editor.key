@@ -4,7 +4,7 @@ block state
   - const scripts = ['../text-editor/index.min.js', 'index.min.js']
   - const styles = ['../layout/index.min.css']
   - const theme = '#000'
-  - const title = 'Key ' + version
+  - const title = 'Text Editor Key ' + version
 
 block script
   script
@@ -22,26 +22,13 @@ block script
     |     return this.wrap('<i>', '</i>'), false;
     | });
 
-block style
-  style
-    | @media (min-width: 45rem) {
-    |   :root {
-    |     padding-bottom: 3rem;
-    |     padding-top: 3rem;
-    |   }
-    |   body > * {
-    |     margin-left: auto;
-    |     margin-right: auto;
-    |     max-width: 45rem;
-    |   }
-    | }
-
 block content
   header
-    h1= title
-    p Key extension for #[a(href='../text-editor/index.html') Text Editor].
+    h1
+      a(href='../text-editor/index.html') &laquo;
+      = ' ' + title
+    p Key extension for #[a(href='../text-editor/index.html') Text Editor]. This extension provides a feature to easily interact with the keyboard keys.
     hr
-    p Provides a feature to easily interact with the keyboard keys.
   main
     p
       textarea(spellcheck='false' style={
@@ -111,23 +98,20 @@ block content
       | editor.key('Control-i', function () {
       |     return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
       | });
-    h2 Methods and Properties
-    h3: code editor.command(command, of)
+    h2 Methods
+    h3 Instance Methods
+    h4: code editor.command(command, of)
     p Add a command to be used later by the #[code editor.key()] method.
     pre: code
       | editor.command('bold', function () {
       |     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
       |     return false; // Prevent normal keyboard behavior by returning `false`
       | });
-    h3: code editor.commands
-    p List of commands.
-    pre: code
-      | console.log(editor.commands);
-    h3: code editor.k()
+    h4: code editor.k()
     p Return the current key combination.
     pre: code
       | console.log(editor.k());
-    h3: code editor.key(key, of)
+    h4: code editor.key(key, of)
     p Add a command that will be executed when a certain keyboard key combination is pressed.
     pre: code
       | editor.key('Control-b', 'bold'); // This will execute `editor.commands.bold()` if exists
@@ -136,8 +120,14 @@ block content
       |     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
       |     return false; // Prevent normal keyboard behavior by returning `false`
       | });
-    h3: code editor.keys
-    p List of keyboard key combinations and their commands.
+    h2 Properties
+    h3 Instance Properties
+    h4: code editor.commands
+    p List of commands.
+    pre: code
+      | console.log(editor.commands);
+    h4: code editor.keys
+    p List of keyboard key combinations.
     pre: code
       | console.log(editor.keys);
   footer

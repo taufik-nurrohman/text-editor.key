@@ -5,28 +5,14 @@
     <meta content="#000" name="theme-color">
     <meta content="width=device-width" name="viewport">
     <meta content="Provides a feature to easily interact with the keyboard keys." name="description">
-    <title>Key 1.0.0</title>
+    <title>Text Editor Key 1.0.0</title>
     <link href="../layout/index.min.css" rel="stylesheet">
-    <style>
-      @media (min-width: 45rem) {
-        :root {
-          padding-bottom: 3rem;
-          padding-top: 3rem;
-        }
-        body > * {
-          margin-left: auto;
-          margin-right: auto;
-          max-width: 45rem;
-        }
-      }
-    </style>
   </head>
   <body>
     <header>
-      <h1>Key 1.0.0</h1>
-      <p>Key extension for <a href="../text-editor/index.html">Text Editor</a>.</p>
+      <h1><a href="../text-editor/index.html">&laquo;</a> Text Editor Key 1.0.0</h1>
+      <p>Key extension for <a href="../text-editor/index.html">Text Editor</a>. This extension provides a feature to easily interact with the keyboard keys.</p>
       <hr>
-      <p>Provides a feature to easily interact with the keyboard keys.</p>
     </header>
     <main>
       <p><textarea spellcheck="false" style="display:block;width:100%;">abcdef</textarea></p>
@@ -90,28 +76,31 @@ editor.key('Control-b', 'bold');
 editor.key('Control-i', function () {
     return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
 });</code></pre>
-      <h2>Methods and Properties</h2>
-      <h3><code>editor.command(command, of)</code></h3>
+      <h2>Methods</h2>
+      <h3>Instance Methods</h3>
+      <h4><code>editor.command(command, of)</code></h4>
       <p>Add a command to be used later by the <code>editor.key()</code> method.</p>
       <pre><code>editor.command('bold', function () {
     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
     return false; // Prevent normal keyboard behavior by returning `false`
 });</code></pre>
-      <h3><code>editor.commands</code></h3>
-      <p>List of commands.</p>
-      <pre><code>console.log(editor.commands);</code></pre>
-      <h3><code>editor.k()</code></h3>
+      <h4><code>editor.k()</code></h4>
       <p>Return the current key combination.</p>
       <pre><code>console.log(editor.k());</code></pre>
-      <h3><code>editor.key(key, of)</code></h3>
+      <h4><code>editor.key(key, of)</code></h4>
       <p>Add a command that will be executed when a certain keyboard key combination is pressed.</p>
       <pre><code>editor.key('Control-b', 'bold'); // This will execute `editor.commands.bold()` if exists</code></pre>
       <pre><code>editor.key('Control-b', function () {
     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
     return false; // Prevent normal keyboard behavior by returning `false`
 });</code></pre>
-      <h3><code>editor.keys</code></h3>
-      <p>List of keyboard key combinations and their commands.</p>
+      <h2>Properties</h2>
+      <h3>Instance Properties</h3>
+      <h4><code>editor.commands</code></h4>
+      <p>List of commands.</p>
+      <pre><code>console.log(editor.commands);</code></pre>
+      <h4><code>editor.keys</code></h4>
+      <p>List of keyboard key combinations.</p>
       <pre><code>console.log(editor.keys);</code></pre>
     </main>
     <footer>
