@@ -48,7 +48,7 @@ block content
         'display': 'block',
         'width': '100%'
       }) abcdef
-    p(role='note') Try to press #[kbd Control-b] or #[kbd Control-i] in the text area above!
+    p(role='note') Try to press #[kbd Control] + #[kbd b] or #[kbd Control] + #[kbd i] in the text area above!
     h2 Usage
     h4 Browser
     pre: code
@@ -123,6 +123,10 @@ block content
     p List of commands.
     pre: code
       | console.log(editor.commands);
+    h3: code editor.k()
+    p Return the current key combination.
+    pre: code
+      | console.log(editor.k());
     h3: code editor.key(key, of)
     p Add a command that will be executed when a certain keyboard key combination is pressed.
     pre: code

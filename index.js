@@ -170,6 +170,9 @@
         }
         node.addEventListener(name, then, options);
     };
+    var bounce = debounce(function (map) {
+        return map.pull();
+    }, 1000);
 
     function onBlur(e) {
         this.Key.pull(); // Reset all key(s)
@@ -192,7 +195,7 @@
                 console.warn('Unknown command: `' + command + '`');
             }
         }
-        this.Bounce();
+        bounce(map); // Reset all key(s) after 1 second idle
     }
 
     function onKeyUp(e) {
@@ -205,18 +208,18 @@
         $.command = function (command, of) {
             return $.commands[command] = of, $;
         };
+        $.commands = fromStates(map.commands, $.state.commands || {});
+        $.k = function () {
+            return map + "";
+        };
         $.key = function (key, of) {
             return $.keys[key] = of, $;
         };
-        $.commands = fromStates(map.commands, $.state.commands || {});
         $.keys = fromStates(map.keys, $.state.keys || {});
         onEvent('blur', self, onBlur);
         onEvent('input', self, onInput);
         onEvent('keydown', self, onKeyDown);
         onEvent('keyup', self, onKeyUp);
-        self.Bounce = debounce(function () {
-            return map.pull();
-        }, 1000); // Reset all key(s) after 1 second idle
         self.Key = map;
     }
 
@@ -224,7 +227,6 @@
         var $ = this;
         delete $.commands;
         delete $.keys;
-        delete self.Bounce;
         delete self.Key;
         offEvent('blur', self, onBlur);
         offEvent('input', self, onInput);

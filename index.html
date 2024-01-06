@@ -30,7 +30,7 @@
     </header>
     <main>
       <p><textarea spellcheck="false" style="display:block;width:100%;">abcdef</textarea></p>
-      <p role="note">Try to press <kbd>Control-b</kbd> or <kbd>Control-i</kbd> in the text area above!</p>
+      <p role="note">Try to press <kbd>Control</kbd> + <kbd>b</kbd> or <kbd>Control</kbd> + <kbd>i</kbd> in the text area above!</p>
       <h2>Usage</h2>
       <h4>Browser</h4>
       <pre><code>&lt;script src="<a href="../text-editor/index.min.js" target="_blank">./text-editor/index.min.js</a>"&gt;&lt;/script&gt;
@@ -100,6 +100,9 @@ editor.key('Control-i', function () {
       <h3><code>editor.commands</code></h3>
       <p>List of commands.</p>
       <pre><code>console.log(editor.commands);</code></pre>
+      <h3><code>editor.k()</code></h3>
+      <p>Return the current key combination.</p>
+      <pre><code>console.log(editor.k());</code></pre>
       <h3><code>editor.key(key, of)</code></h3>
       <p>Add a command that will be executed when a certain keyboard key combination is pressed.</p>
       <pre><code>editor.key('Control-b', 'bold'); // This will execute `editor.commands.bold()` if exists</code></pre>
