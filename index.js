@@ -172,7 +172,7 @@
     };
     var bounce = debounce(function (map) {
         return map.pull();
-    }, 1000);
+    }, 100);
 
     function onBlur(e) {
         this.Key.pull(); // Reset all key(s)
@@ -195,7 +195,7 @@
                 console.warn('Unknown command: `' + command + '`');
             }
         }
-        bounce(map); // Reset all key(s) after 1 second idle
+        bounce(map); // Reset all key(s) after 100 millisecond(s) idle
     }
 
     function onKeyUp(e) {
