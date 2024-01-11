@@ -3,7 +3,7 @@ import {debounce} from '@taufik-nurrohman/tick';
 import {fromStates} from '@taufik-nurrohman/from';
 import {onEvent, offEvent, offEventDefault} from '@taufik-nurrohman/event';
 
-const bounce = debounce(map => map.pull(), 100);
+const bounce = debounce(map => map.pull(), 1000);
 
 function onBlur(e) {
     this.Key.pull(); // Reset all key(s)
@@ -24,7 +24,7 @@ function onKeyDown(e) {
             console.warn('Unknown command: `' + command + '`');
         }
     }
-    bounce(map); // Reset all key(s) after 100 millisecond(s) idle
+    bounce(map); // Reset all key(s) after 1 second idle
 }
 
 function onKeyUp(e) {
