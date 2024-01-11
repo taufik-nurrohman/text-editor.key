@@ -209,8 +209,12 @@
             return $.commands[command] = of, $;
         };
         $.commands = fromStates(map.commands, $.state.commands || {});
-        $.k = function () {
-            return map + "";
+        $.k = function (join) {
+            var key = map + "";
+            if (!join || '-' === join) {
+                return key;
+            }
+            return key.split(/(?<!-)-/).join(join);
         };
         $.key = function (key, of) {
             return $.keys[key] = of, $;

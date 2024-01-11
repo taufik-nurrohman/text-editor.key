@@ -36,7 +36,13 @@ function attach(self) {
     let map = new Key($);
     $.command = (command, of) => (($.commands[command] = of), $);
     $.commands = fromStates(map.commands, $.state.commands || {});
-    $.k = () => map + "";
+    $.k = join => {
+        let key = map + "";
+        if (!join || '-' === join) {
+            return key;
+        }
+        return key.split(/(?<!-)-/).join(join);
+    };
     $.key = (key, of) => (($.keys[key] = of), $);
     $.keys = fromStates(map.keys, $.state.keys || {});
     onEvent('blur', self, onBlur);
