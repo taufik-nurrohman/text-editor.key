@@ -173,18 +173,19 @@
     var bounce = debounce(function (map) {
         return map.pull();
     }, 1000);
+    var id = 'Key_' + Date.now();
 
     function onBlur(e) {
-        this.Key.pull(); // Reset all key(s)
+        this[id].pull(); // Reset all key(s)
     }
 
     function onInput(e) {
-        this.Key.pull(); // Reset all key(s)
+        onBlur.call(this);
     }
 
     function onKeyDown(e) {
         var command,
-            map = this.Key,
+            map = this[id],
             v;
         map.push(e.key); // Add current key to the queue
         if (command = map.command()) {
@@ -199,7 +200,7 @@
     }
 
     function onKeyUp(e) {
-        this.Key.pull(e.key); // Reset current key
+        this[id].pull(e.key); // Reset current key
     }
 
     function attach(self) {
@@ -210,11 +211,18 @@
         };
         $.commands = fromStates(map.commands, $.state.commands || {});
         $.k = function (join) {
-            var key = map + "";
-            if (!join || '-' === join) {
-                return key;
+            var key = map + "",
+                keys;
+            if ('-' !== join) {
+                keys = key.split(/(?<!-)-/);
+                if (false !== join) {
+                    return keys.join(join);
+                }
             }
-            return key.split(/(?<!-)-/).join(join);
+            if (false === join) {
+                return keys;
+            }
+            return key;
         };
         $.key = function (key, of) {
             return $.keys[key] = of, $;
@@ -224,14 +232,11 @@
         onEvent('input', self, onInput);
         onEvent('keydown', self, onKeyDown);
         onEvent('keyup', self, onKeyUp);
-        self.Key = map;
+        self[id] = map;
     }
 
     function detach(self) {
-        var $ = this;
-        delete $.commands;
-        delete $.keys;
-        delete self.Key;
+        delete self[id];
         offEvent('blur', self, onBlur);
         offEvent('input', self, onInput);
         offEvent('keydown', self, onKeyDown);

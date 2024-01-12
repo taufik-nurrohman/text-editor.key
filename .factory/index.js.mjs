@@ -4,17 +4,18 @@ import {fromStates} from '@taufik-nurrohman/from';
 import {onEvent, offEvent, offEventDefault} from '@taufik-nurrohman/event';
 
 const bounce = debounce(map => map.pull(), 1000);
+const id = 'Key_' + Date.now();
 
 function onBlur(e) {
-    this.Key.pull(); // Reset all key(s)
+    this[id].pull(); // Reset all key(s)
 }
 
 function onInput(e) {
-    this.Key.pull(); // Reset all key(s)
+    onBlur.call(this);
 }
 
 function onKeyDown(e) {
-    let command, map = this.Key, v;
+    let command, map = this[id], v;
     map.push(e.key); // Add current key to the queue
     if (command = map.command()) {
         v = map.fire(command);
@@ -28,7 +29,7 @@ function onKeyDown(e) {
 }
 
 function onKeyUp(e) {
-    this.Key.pull(e.key); // Reset current key
+    this[id].pull(e.key); // Reset current key
 }
 
 function attach(self) {
@@ -37,11 +38,18 @@ function attach(self) {
     $.command = (command, of) => (($.commands[command] = of), $);
     $.commands = fromStates(map.commands, $.state.commands || {});
     $.k = join => {
-        let key = map + "";
-        if (!join || '-' === join) {
-            return key;
+        let key = map + "",
+            keys;
+        if ('-' !== join) {
+            keys = key.split(/(?<!-)-/);
+            if (false !== join) {
+                return keys.join(join);
+            }
         }
-        return key.split(/(?<!-)-/).join(join);
+        if (false === join) {
+            return keys;
+        }
+        return key;
     };
     $.key = (key, of) => (($.keys[key] = of), $);
     $.keys = fromStates(map.keys, $.state.keys || {});
@@ -49,14 +57,11 @@ function attach(self) {
     onEvent('input', self, onInput);
     onEvent('keydown', self, onKeyDown);
     onEvent('keyup', self, onKeyUp);
-    self.Key = map;
+    self[id] = map;
 }
 
 function detach(self) {
-    let $ = this;
-    delete $.commands;
-    delete $.keys;
-    delete self.Key;
+    delete self[id];
     offEvent('blur', self, onBlur);
     offEvent('input', self, onInput);
     offEvent('keydown', self, onKeyDown);
