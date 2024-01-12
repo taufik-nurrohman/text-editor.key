@@ -86,7 +86,9 @@ editor.key('Control-i', function () {
 });</code></pre>
       <h4><code>editor.k(join = '-')</code></h4>
       <p>Return the current key combination.</p>
-      <pre><code>console.log(editor.k());</code></pre>
+      <pre><code>console.log(editor.k());
+console.log(editor.k('\n'));
+console.log(editor.k(false));</code></pre>
       <h4><code>editor.key(key, of)</code></h4>
       <p>Add a command that will be executed when a certain keyboard key combination is pressed.</p>
       <pre><code>editor.key('Control-b', 'bold'); // This will execute `editor.commands.bold()` if exists</code></pre>

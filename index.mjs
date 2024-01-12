@@ -1,7 +1,7 @@
 import Key from '@taufik-nurrohman/key';
 import {debounce} from '@taufik-nurrohman/tick';
 import {fromStates} from '@taufik-nurrohman/from';
-import {onEvent, offEvent, offEventDefault} from '@taufik-nurrohman/event';
+import {offEventDefault} from '@taufik-nurrohman/event';
 
 const bounce = debounce(map => map.pull(), 1000);
 const id = 'Key_' + Date.now();
@@ -53,19 +53,22 @@ function attach(self) {
     };
     $.key = (key, of) => (($.keys[key] = of), $);
     $.keys = fromStates(map.keys, $.state.keys || {});
-    onEvent('blur', self, onBlur);
-    onEvent('input', self, onInput);
-    onEvent('keydown', self, onKeyDown);
-    onEvent('keyup', self, onKeyUp);
-    self[id] = map;
+    $.on('blur', onBlur);
+    $.on('input', onInput);
+    $.on('key.down', onKeyDown);
+    $.on('key.up', onKeyUp);
+    $[id] = map;
+    return $;
 }
 
 function detach(self) {
-    delete self[id];
-    offEvent('blur', self, onBlur);
-    offEvent('input', self, onInput);
-    offEvent('keydown', self, onKeyDown);
-    offEvent('keyup', self, onKeyUp);
+    let $ = this;
+    $.off('blur', onBlur);
+    $.off('input', onInput);
+    $.off('key.down', onKeyDown);
+    $.off('key.up', onKeyUp);
+    delete $[id];
+    return $;
 }
 
 export default {attach, detach};

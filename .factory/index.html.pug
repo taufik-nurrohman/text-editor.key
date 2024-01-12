@@ -111,6 +111,8 @@ block content
     p Return the current key combination.
     pre: code
       | console.log(editor.k());
+      | console.log(editor.k('\n'));
+      | console.log(editor.k(false));
     h4: code editor.key(key, of)
     p Add a command that will be executed when a certain keyboard key combination is pressed.
     pre: code

@@ -158,17 +158,8 @@
             }, time);
         };
     };
-    var offEvent = function offEvent(name, node, then) {
-        node.removeEventListener(name, then);
-    };
     var offEventDefault = function offEventDefault(e) {
         return e && e.preventDefault();
-    };
-    var onEvent = function onEvent(name, node, then, options) {
-        if (options === void 0) {
-            options = false;
-        }
-        node.addEventListener(name, then, options);
     };
     var bounce = debounce(function (map) {
         return map.pull();
@@ -228,19 +219,22 @@
             return $.keys[key] = of, $;
         };
         $.keys = fromStates(map.keys, $.state.keys || {});
-        onEvent('blur', self, onBlur);
-        onEvent('input', self, onInput);
-        onEvent('keydown', self, onKeyDown);
-        onEvent('keyup', self, onKeyUp);
-        self[id] = map;
+        $.on('blur', onBlur);
+        $.on('input', onInput);
+        $.on('key.down', onKeyDown);
+        $.on('key.up', onKeyUp);
+        $[id] = map;
+        return $;
     }
 
     function detach(self) {
-        delete self[id];
-        offEvent('blur', self, onBlur);
-        offEvent('input', self, onInput);
-        offEvent('keydown', self, onKeyDown);
-        offEvent('keyup', self, onKeyUp);
+        var $ = this;
+        $.off('blur', onBlur);
+        $.off('input', onInput);
+        $.off('key.down', onKeyDown);
+        $.off('key.up', onKeyUp);
+        delete $[id];
+        return $;
     }
     var index_js = {
         attach: attach,
