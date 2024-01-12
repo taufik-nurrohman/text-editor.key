@@ -211,7 +211,7 @@
                 }
             }
             if (false === join) {
-                if (key === join) {
+                if ('-' === key) {
                     return [key];
                 }
                 return keys;
