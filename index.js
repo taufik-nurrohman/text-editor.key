@@ -205,7 +205,7 @@
             var key = map + "",
                 keys;
             if ('-' !== join) {
-                keys = key.split(/(?<!-)-/);
+                keys = "" !== key ? key.split(/(?<!-)-/) : [];
                 if (false !== join) {
                     return keys.join(join);
                 }
