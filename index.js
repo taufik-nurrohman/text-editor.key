@@ -194,7 +194,7 @@
         this[id].pull(e.key); // Reset current key
     }
 
-    function attach(self) {
+    function attach() {
         var $ = this;
         var map = new Key($);
         $.command = function (command, of) {
@@ -227,7 +227,7 @@
         return $;
     }
 
-    function detach(self) {
+    function detach() {
         var $ = this;
         $.off('blur', onBlur);
         $.off('input', onInput);

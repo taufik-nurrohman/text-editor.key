@@ -32,7 +32,7 @@ function onKeyUp(e) {
     this[id].pull(e.key); // Reset current key
 }
 
-function attach(self) {
+function attach() {
     let $ = this;
     let map = new Key($);
     $.command = (command, of) => (($.commands[command] = of), $);
@@ -61,7 +61,7 @@ function attach(self) {
     return $;
 }
 
-function detach(self) {
+function detach() {
     let $ = this;
     $.off('blur', onBlur);
     $.off('input', onInput);
