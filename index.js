@@ -200,7 +200,7 @@
         $.command = function (command, of) {
             return $.commands[command] = of, $;
         };
-        $.commands = fromStates(map.commands, $.state.commands || {});
+        $.commands = fromStates($.commands = map.commands, $.state.commands || {});
         $.k = function (join) {
             var key = map + "",
                 keys;
@@ -218,7 +218,7 @@
         $.key = function (key, of) {
             return $.keys[key] = of, $;
         };
-        $.keys = fromStates(map.keys, $.state.keys || {});
+        $.keys = fromStates($.keys = map.keys, $.state.keys || {});
         $.on('blur', onBlur);
         $.on('input', onInput);
         $.on('key.down', onKeyDown);
@@ -229,6 +229,7 @@
 
     function detach() {
         var $ = this;
+        $[id].pull();
         $.off('blur', onBlur);
         $.off('input', onInput);
         $.off('key.down', onKeyDown);

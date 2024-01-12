@@ -36,7 +36,7 @@ function attach() {
     let $ = this;
     let map = new Key($);
     $.command = (command, of) => (($.commands[command] = of), $);
-    $.commands = fromStates(map.commands, $.state.commands || {});
+    $.commands = fromStates($.commands = map.commands, $.state.commands || {});
     $.k = join => {
         let key = map + "",
             keys;
@@ -52,7 +52,7 @@ function attach() {
         return key;
     };
     $.key = (key, of) => (($.keys[key] = of), $);
-    $.keys = fromStates(map.keys, $.state.keys || {});
+    $.keys = fromStates($.keys = map.keys, $.state.keys || {});
     $.on('blur', onBlur);
     $.on('input', onInput);
     $.on('key.down', onKeyDown);
@@ -63,6 +63,7 @@ function attach() {
 
 function detach() {
     let $ = this;
+    $[id].pull();
     $.off('blur', onBlur);
     $.off('input', onInput);
     $.off('key.down', onKeyDown);
