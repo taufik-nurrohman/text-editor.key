@@ -1,6 +1,7 @@
 import Key from '@taufik-nurrohman/key';
 import {debounce} from '@taufik-nurrohman/tick';
 import {fromStates} from '@taufik-nurrohman/from';
+import {isSet} from '@taufik-nurrohman/is';
 import {offEventDefault} from '@taufik-nurrohman/event';
 
 const bounce = debounce(map => map.pull(), 1000);
@@ -40,7 +41,7 @@ function attach() {
     $.k = join => {
         let key = map + "",
             keys;
-        if ('-' !== join) {
+        if (isSet(join) && '-' !== join) {
             keys = "" !== key ? key.split(/(?<!-)-/) : [];
             if (false !== join) {
                 return keys.join(join);

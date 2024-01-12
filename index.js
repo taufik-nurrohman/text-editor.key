@@ -204,7 +204,7 @@
         $.k = function (join) {
             var key = map + "",
                 keys;
-            if ('-' !== join) {
+            if (isSet(join) && '-' !== join) {
                 keys = "" !== key ? key.split(/(?<!-)-/) : [];
                 if (false !== join) {
                     return keys.join(join);
