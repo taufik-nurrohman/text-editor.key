@@ -48,6 +48,9 @@ function attach() {
             }
         }
         if (false === join) {
+            if (key === join) {
+                return [key];
+            }
             return keys;
         }
         return key;
