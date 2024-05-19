@@ -164,7 +164,8 @@
     var bounce = debounce(function (map) {
         return map.pull();
     }, 1000);
-    var id = 'Key_' + Date.now();
+    var name = 'TextEditor.Key';
+    var id = '_Key';
 
     function onBlur(e) {
         this[id].pull(); // Reset all key(s)
@@ -196,16 +197,20 @@
 
     function attach() {
         var $ = this;
+        var $$ = $.constructor.prototype;
         var map = new Key($);
-        $.command = function (command, of) {
-            return $.commands[command] = of, $;
-        };
         $.commands = fromStates($.commands = map.commands, $.state.commands || {});
-        $.k = function (join) {
-            var key = map + "",
+        $.keys = fromStates($.keys = map.keys, $.state.keys || {});
+        !isFunction($$.command) && ($$.command = function (command, of) {
+            var $ = this;
+            return $.commands[command] = of, $;
+        });
+        !isFunction($$.k) && ($$.k = function (join) {
+            var $ = this,
+                key = $[id] + "",
                 keys;
             if (isSet(join) && '-' !== join) {
-                keys = "" !== key ? key.split(/(?<!-)-/) : [];
+                keys = "" !== key ? key.split(/-(?!$)/) : [];
                 if (false !== join) {
                     return keys.join(join);
                 }
@@ -217,17 +222,16 @@
                 return keys;
             }
             return key;
-        };
-        $.key = function (key, of) {
+        });
+        !isFunction($$.key) && ($$.key = function (key, of) {
+            var $ = this;
             return $.keys[key] = of, $;
-        };
-        $.keys = fromStates($.keys = map.keys, $.state.keys || {});
+        });
         $.on('blur', onBlur);
         $.on('input', onInput);
         $.on('key.down', onKeyDown);
         $.on('key.up', onKeyUp);
-        $[id] = map;
-        return $;
+        return $[id] = map, $;
     }
 
     function detach() {
@@ -242,7 +246,8 @@
     }
     var index_js = {
         attach: attach,
-        detach: detach
+        detach: detach,
+        name: name
     };
     return index_js;
 }));

@@ -1,11 +1,13 @@
 import Key from '@taufik-nurrohman/key';
 import {debounce} from '@taufik-nurrohman/tick';
 import {fromStates} from '@taufik-nurrohman/from';
-import {isSet} from '@taufik-nurrohman/is';
+import {isFunction, isSet} from '@taufik-nurrohman/is';
 import {offEventDefault} from '@taufik-nurrohman/event';
 
 const bounce = debounce(map => map.pull(), 1000);
-const id = 'Key_' + Date.now();
+const name = 'TextEditor.Key';
+
+const id = '_Key';
 
 function onBlur(e) {
     this[id].pull(); // Reset all key(s)
@@ -34,15 +36,21 @@ function onKeyUp(e) {
 }
 
 function attach() {
-    let $ = this;
-    let map = new Key($);
-    $.command = (command, of) => (($.commands[command] = of), $);
+    const $ = this;
+    const $$ = $.constructor.prototype;
+    const map = new Key($);
     $.commands = fromStates($.commands = map.commands, $.state.commands || {});
-    $.k = join => {
-        let key = map + "",
+    $.keys = fromStates($.keys = map.keys, $.state.keys || {});
+    !isFunction($$.command) && ($$.command = function (command, of) {
+        let $ = this;
+        return ($.commands[command] = of), $;
+    });
+    !isFunction($$.k) && ($$.k = function (join) {
+        let $ = this,
+            key = $[id] + "",
             keys;
         if (isSet(join) && '-' !== join) {
-            keys = "" !== key ? key.split(/(?<!-)-/) : [];
+            keys = "" !== key ? key.split(/-(?!$)/) : [];
             if (false !== join) {
                 return keys.join(join);
             }
@@ -54,15 +62,16 @@ function attach() {
             return keys;
         }
         return key;
-    };
-    $.key = (key, of) => (($.keys[key] = of), $);
-    $.keys = fromStates($.keys = map.keys, $.state.keys || {});
+    });
+    !isFunction($$.key) && ($$.key = function (key, of) {
+        let $ = this;
+        return ($.keys[key] = of), $;
+    });
     $.on('blur', onBlur);
     $.on('input', onInput);
     $.on('key.down', onKeyDown);
     $.on('key.up', onKeyUp);
-    $[id] = map;
-    return $;
+    return ($[id] = map), $;
 }
 
 function detach() {
@@ -76,4 +85,4 @@ function detach() {
     return $;
 }
 
-export default {attach, detach};
+export default {attach, detach, name};
