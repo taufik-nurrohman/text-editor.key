@@ -10,11 +10,13 @@ const name = 'TextEditor.Key';
 const id = '_Key';
 
 function onBlur(e) {
-    this[id].pull(); // Reset all key(s)
+    let $ = this;
+    $._event = e;
+    $[id].pull(); // Reset all key(s)
 }
 
 function onInput(e) {
-    onBlur.call(this);
+    onBlur.call(this, e);
 }
 
 function onKeyDown(e) {
@@ -35,7 +37,9 @@ function onKeyDown(e) {
 }
 
 function onKeyUp(e) {
-    this[id].pull(e.key); // Reset current key
+    let $ = this;
+    $._event = e;
+    $[id].pull(e.key); // Reset current key
 }
 
 function attach() {
