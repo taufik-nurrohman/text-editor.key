@@ -2,7 +2,7 @@ import Key from '@taufik-nurrohman/key';
 import {debounce} from '@taufik-nurrohman/tick';
 import {fromStates} from '@taufik-nurrohman/from';
 import {isFunction, isSet} from '@taufik-nurrohman/is';
-import {offEventDefault} from '@taufik-nurrohman/event';
+import {offEventDefault, offEventPropagation} from '@taufik-nurrohman/event';
 
 const bounce = debounce(map => map.pull(), 1000);
 const name = 'TextEditor.Key';
@@ -18,12 +18,15 @@ function onInput(e) {
 }
 
 function onKeyDown(e) {
-    let command, map = this[id], v;
+    let $ = this;
+    let command, map = $[id], v;
     map.push(e.key); // Add current key to the queue
+    $._event = e;
     if (command = map.command()) {
         v = map.fire(command);
         if (false === v) {
             offEventDefault(e);
+            offEventPropagation(e);
         } else if (null === v) {
             console.warn('Unknown command: `' + command + '`');
         }

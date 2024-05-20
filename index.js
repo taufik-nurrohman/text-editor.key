@@ -169,6 +169,9 @@
     var offEventDefault = function offEventDefault(e) {
         return e && e.preventDefault();
     };
+    var offEventPropagation = function offEventPropagation(e) {
+        return e && e.stopPropagation();
+    };
     var bounce = debounce(function (map) {
         return map.pull();
     }, 1000);
@@ -184,14 +187,17 @@
     }
 
     function onKeyDown(e) {
+        var $ = this;
         var command,
-            map = this[id],
+            map = $[id],
             v;
         map.push(e.key); // Add current key to the queue
+        $._event = e;
         if (command = map.command()) {
             v = map.fire(command);
             if (false === v) {
                 offEventDefault(e);
+                offEventPropagation(e);
             } else if (null === v) {
                 console.warn('Unknown command: `' + command + '`');
             }
