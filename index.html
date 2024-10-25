@@ -5,19 +5,27 @@
     <meta content="#000" name="theme-color">
     <meta content="width=device-width" name="viewport">
     <meta content="Provides a feature to easily interact with the keyboard keys." name="description">
-    <title>Text Editor Key 1.0.7</title>
+    <title>Text Editor Key 1.0.8</title>
     <link href="../layout/index.min.css" rel="stylesheet">
+    <style>
+      body {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 60rem;
+      }
+    </style>
   </head>
   <body>
     <header>
-      <h1><a href="../text-editor/index.html#extensions">&laquo;</a> Text Editor Key 1.0.7</h1>
-      <p>Key extension for <a href="../text-editor/index.html">Text Editor</a>. This extension provides a feature to easily interact with the keyboard keys.</p>
-      <hr>
+      <hgroup>
+        <h1><a href="../text-editor/index.html#extensions">&laquo;</a> Text Editor Key 1.0.8</h1>
+        <p>This extension provides a feature to easily interact with the keyboard keys.</p>
+      </hgroup>
     </header>
     <main>
       <p><textarea spellcheck="false" style="display:block;width:100%;">abcdef</textarea></p>
       <p role="note">Try to press <kbd>Control</kbd> + <kbd>b</kbd> or <kbd>Control</kbd> + <kbd>i</kbd> in the text area above!</p>
-      <h2>Usage</h2>
+      <h2 id="usage"><a href="#usage">#</a> Usage</h2>
       <h4>Browser</h4>
       <pre><code>&lt;script src="<a href="../text-editor/index.min.js" target="_blank">./text-editor/index.min.js</a>"&gt;&lt;/script&gt;
 &lt;script src="<a href="index.min.js" target="_blank">./text-editor.key/index.min.js</a>"&gt;&lt;/script&gt;
@@ -76,7 +84,7 @@ editor.key('Control-b', 'bold');
 editor.key('Control-i', function () {
     return this.wrap('&lt;i&gt;', '&lt;/i&gt;'), false;
 });</code></pre>
-      <h2>Methods</h2>
+      <h2 id="methods"><a href="#methods">#</a> Methods</h2>
       <h3>Instance Methods</h3>
       <h4><code>editor.command(command, of)</code></h4>
       <p>Add a command to be used later by the <code>editor.key()</code> method.</p>
@@ -96,7 +104,7 @@ console.log(editor.k(false));</code></pre>
     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
     return false; // Prevent normal keyboard behavior by returning `false`
 });</code></pre>
-      <h2>Properties</h2>
+      <h2 id="properties"><a href="#properties">#</a> Properties</h2>
       <h3>Instance Properties</h3>
       <h4><code>editor.commands</code></h4>
       <p>List of commands.</p>

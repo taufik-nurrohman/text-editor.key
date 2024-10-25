@@ -6,13 +6,21 @@ import {offEventDefault, offEventPropagation} from '@taufik-nurrohman/event';
 
 const bounce = debounce(map => map.pull(), 1000);
 const name = 'TextEditor.Key';
+const references = new WeakMap;
 
-const id = '_Key';
+function getReference(key) {
+    return references.get(key) || null;
+}
+
+function letReference(key) {
+    return references.delete(key);
+}
 
 function onBlur(e) {
-    let $ = this;
+    let $ = this,
+        map = getReference($);
     $._event = e;
-    $[id].pull(); // Reset all key(s)
+    map.pull(); // Reset all key(s)
 }
 
 function onInput(e) {
@@ -21,7 +29,7 @@ function onInput(e) {
 
 function onKeyDown(e) {
     let $ = this;
-    let command, map = $[id], v;
+    let command, map = getReference($), v;
     map.push(e.key); // Add current key to the queue
     $._event = e;
     if (command = map.command()) {
@@ -37,9 +45,14 @@ function onKeyDown(e) {
 }
 
 function onKeyUp(e) {
-    let $ = this;
+    let $ = this,
+        map = getReference($);
     $._event = e;
-    $[id].pull(e.key); // Reset current key
+    map.pull(e.key); // Reset current key
+}
+
+function setReference(key, value) {
+    return references.set(key, value);
 }
 
 function attach() {
@@ -54,8 +67,8 @@ function attach() {
     });
     !isFunction($$.k) && ($$.k = function (join) {
         let $ = this,
-            key = $[id] + "",
-            keys;
+            map = getReference($),
+            key = map + "", keys;
         if (isSet(join) && '-' !== join) {
             keys = "" !== key ? key.split(/-(?!$)/) : [];
             if (false !== join) {
@@ -78,18 +91,18 @@ function attach() {
     $.on('input', onInput);
     $.on('key.down', onKeyDown);
     $.on('key.up', onKeyUp);
-    return ($[id] = map), $;
+    return setReference($, map), $;
 }
 
 function detach() {
-    let $ = this;
-    $[id].pull();
+    let $ = this,
+        map = getReference($);
+    map.pull();
     $.off('blur', onBlur);
     $.off('input', onInput);
     $.off('key.down', onKeyDown);
     $.off('key.up', onKeyUp);
-    delete $[id];
-    return $;
+    return letReference($), $;
 }
 
 export default {attach, detach, name};

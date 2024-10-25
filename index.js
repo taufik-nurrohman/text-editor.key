@@ -60,7 +60,7 @@
     var hasValue = function hasValue(x, data) {
         return -1 !== data.indexOf(x);
     };
-    var fromStates = function fromStates() {
+    var _fromStates = function fromStates() {
         for (var _len = arguments.length, lot = new Array(_len), _key = 0; _key < _len; _key++) {
             lot[_key] = arguments[_key];
         }
@@ -82,7 +82,7 @@
                     }
                     // Merge object recursive
                 } else if (isObject(out[k]) && isObject(lot[i][k])) {
-                    out[k] = fromStates({
+                    out[k] = _fromStates({
                         /* Clone! */ }, out[k], lot[i][k]);
                     // Replace value
                 } else {
@@ -176,12 +176,21 @@
         return map.pull();
     }, 1000);
     var name = 'TextEditor.Key';
-    var id = '_Key';
+    var references = new WeakMap();
+
+    function getReference(key) {
+        return references.get(key) || null;
+    }
+
+    function letReference(key) {
+        return references.delete(key);
+    }
 
     function onBlur(e) {
-        var $ = this;
+        var $ = this,
+            map = getReference($);
         $._event = e;
-        $[id].pull(); // Reset all key(s)
+        map.pull(); // Reset all key(s)
     }
 
     function onInput(e) {
@@ -191,7 +200,7 @@
     function onKeyDown(e) {
         var $ = this;
         var command,
-            map = $[id],
+            map = getReference($),
             v;
         map.push(e.key); // Add current key to the queue
         $._event = e;
@@ -208,24 +217,30 @@
     }
 
     function onKeyUp(e) {
-        var $ = this;
+        var $ = this,
+            map = getReference($);
         $._event = e;
-        $[id].pull(e.key); // Reset current key
+        map.pull(e.key); // Reset current key
+    }
+
+    function setReference(key, value) {
+        return references.set(key, value);
     }
 
     function attach() {
         var $ = this;
         var $$ = $.constructor.prototype;
         var map = new Key($);
-        $.commands = fromStates($.commands = map.commands, $.state.commands || {});
-        $.keys = fromStates($.keys = map.keys, $.state.keys || {});
+        $.commands = _fromStates($.commands = map.commands, $.state.commands || {});
+        $.keys = _fromStates($.keys = map.keys, $.state.keys || {});
         !isFunction($$.command) && ($$.command = function (command, of) {
             var $ = this;
             return $.commands[command] = of, $;
         });
         !isFunction($$.k) && ($$.k = function (join) {
             var $ = this,
-                key = $[id] + "",
+                map = getReference($),
+                key = map + "",
                 keys;
             if (isSet(join) && '-' !== join) {
                 keys = "" !== key ? key.split(/-(?!$)/) : [];
@@ -249,18 +264,18 @@
         $.on('input', onInput);
         $.on('key.down', onKeyDown);
         $.on('key.up', onKeyUp);
-        return $[id] = map, $;
+        return setReference($, map), $;
     }
 
     function detach() {
-        var $ = this;
-        $[id].pull();
+        var $ = this,
+            map = getReference($);
+        map.pull();
         $.off('blur', onBlur);
         $.off('input', onInput);
         $.off('key.down', onKeyDown);
         $.off('key.up', onKeyUp);
-        delete $[id];
-        return $;
+        return letReference($), $;
     }
     var index_js = {
         attach: attach,
