@@ -21,6 +21,10 @@ block script
     | editor.key('Control-i', function () {
     |     return this.wrap('<i>', '</i>'), false;
     | });
+    |
+    | editor.on('key.down', function () {
+    |     console.log(this.k());
+    | });
 
 block style
   style

@@ -5,7 +5,7 @@
     <meta content="#000" name="theme-color">
     <meta content="width=device-width" name="viewport">
     <meta content="Provides a feature to easily interact with the keyboard keys." name="description">
-    <title>Text Editor Key 1.0.8</title>
+    <title>Text Editor Key 1.0.9</title>
     <link href="../layout/index.min.css" rel="stylesheet">
     <style>
       body {
@@ -18,7 +18,7 @@
   <body>
     <header>
       <hgroup>
-        <h1><a href="../text-editor/index.html#extensions">&laquo;</a> Text Editor Key 1.0.8</h1>
+        <h1><a href="../text-editor/index.html#extensions">&laquo;</a> Text Editor Key 1.0.9</h1>
         <p>This extension provides a feature to easily interact with the keyboard keys.</p>
       </hgroup>
     </header>
@@ -129,6 +129,9 @@ console.log(editor.k(false));</code></pre>
       editor.key('Control-b', 'bold');
       editor.key('Control-i', function () {
           return this.wrap('<i>', '</i>'), false;
+      });
+      editor.on('key.down', function () {
+          console.log(this.k());
       });
     </script>
   </body>

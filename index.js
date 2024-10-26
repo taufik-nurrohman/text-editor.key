@@ -36,8 +36,12 @@
     var isFunction = function isFunction(x) {
         return 'function' === typeof x;
     };
-    var isInstance = function isInstance(x, of) {
-        return x && isSet(of) && x instanceof of ;
+    var isInstance = function isInstance(x, of, exact) {
+        if (!x || 'object' !== typeof x) {
+            return false;
+        } {
+            return isSet(of) && isSet(x.constructor) && of === x.constructor;
+        }
     };
     var isNull = function isNull(x) {
         return null === x;
@@ -46,7 +50,7 @@
         if (isPlain === void 0) {
             isPlain = true;
         }
-        if ('object' !== typeof x) {
+        if (!x || 'object' !== typeof x) {
             return false;
         }
         return isPlain ? isInstance(x, Object) : true;
@@ -57,55 +61,14 @@
     var isString = function isString(x) {
         return 'string' === typeof x;
     };
-    var hasValue = function hasValue(x, data) {
-        return -1 !== data.indexOf(x);
-    };
-    var _fromStates = function fromStates() {
-        for (var _len = arguments.length, lot = new Array(_len), _key = 0; _key < _len; _key++) {
-            lot[_key] = arguments[_key];
-        }
-        var out = lot.shift();
-        for (var i = 0, j = toCount(lot); i < j; ++i) {
-            for (var k in lot[i]) {
-                // Assign value
-                if (!isSet(out[k])) {
-                    out[k] = lot[i][k];
-                    continue;
-                }
-                // Merge array
-                if (isArray(out[k]) && isArray(lot[i][k])) {
-                    out[k] = [ /* Clone! */ ].concat(out[k]);
-                    for (var ii = 0, jj = toCount(lot[i][k]); ii < jj; ++ii) {
-                        if (!hasValue(lot[i][k][ii], out[k])) {
-                            out[k].push(lot[i][k][ii]);
-                        }
-                    }
-                    // Merge object recursive
-                } else if (isObject(out[k]) && isObject(lot[i][k])) {
-                    out[k] = _fromStates({
-                        /* Clone! */ }, out[k], lot[i][k]);
-                    // Replace value
-                } else {
-                    out[k] = lot[i][k];
-                }
-            }
-        }
-        return out;
-    };
-    var toCount = function toCount(x) {
-        return x.length;
-    };
-    var toObjectKeys = function toObjectKeys(x) {
-        return Object.keys(x);
-    };
 
     function Key(self) {
         var $ = this;
         $.commands = {};
         $.key = null;
         $.keys = {};
-        $.queue = {};
         $.self = self || $;
+        $.set = new Set();
         return $;
     }
     var $$ = Key.prototype;
@@ -141,16 +104,19 @@
         var $ = this;
         $.key = null;
         if (!isSet(key)) {
-            return $.queue = {}, $;
+            return $.set = new Set(), $;
         }
-        return delete $.queue[key], $;
+        return $.set.delete(key), $;
     };
     $$.push = function (key) {
         var $ = this;
-        return $.queue[$.key = key] = 1, $;
+        return $.set.add($.key = key, 1), $;
+    };
+    $$.toArray = function () {
+        return Array.from(this.set);
     };
     $$.toString = function () {
-        return toObjectKeys(this.queue).join('-');
+        return this.toArray().join('-');
     };
     Object.defineProperty(Key, 'name', {
         value: 'Key'
@@ -166,14 +132,57 @@
             }, time);
         };
     };
+    var hasValue = function hasValue(x, data) {
+        return -1 !== data.indexOf(x);
+    };
+    var toCount = function toCount(x) {
+        return x.length;
+    };
+    var _fromStates = function fromStates() {
+        for (var _len = arguments.length, lot = new Array(_len), _key = 0; _key < _len; _key++) {
+            lot[_key] = arguments[_key];
+        }
+        var out = lot.shift();
+        for (var i = 0, j = toCount(lot); i < j; ++i) {
+            for (var k in lot[i]) {
+                // Assign value
+                if (!isSet(out[k])) {
+                    out[k] = lot[i][k];
+                    continue;
+                }
+                // Merge array
+                if (isArray(out[k]) && isArray(lot[i][k])) {
+                    out[k] = [ /* Clone! */ ].concat(out[k]);
+                    for (var ii = 0, jj = toCount(lot[i][k]); ii < jj; ++ii) {
+                        if (!hasValue(lot[i][k][ii], out[k])) {
+                            out[k].push(lot[i][k][ii]);
+                        }
+                    }
+                    // Merge object recursive
+                } else if (isObject(out[k]) && isObject(lot[i][k])) {
+                    out[k] = _fromStates({
+                        /* Clone! */ }, out[k], lot[i][k]);
+                    // Replace value
+                } else {
+                    out[k] = lot[i][k];
+                }
+            }
+        }
+        return out;
+    };
     var offEventDefault = function offEventDefault(e) {
         return e && e.preventDefault();
     };
     var offEventPropagation = function offEventPropagation(e) {
         return e && e.stopPropagation();
     };
-    var bounce = debounce(function (map) {
-        return map.pull();
+    var bounce = debounce(function (map, e) {
+        // Remove all keys
+        map.pull();
+        // Make the `Alt`, `Control`, and `Shift` keys sticky (does not require the user to release all keys first to repeat or change the current key combination).
+        e.altKey && map.push('Alt');
+        e.ctrlKey && map.push('Control');
+        e.shiftKey && map.push('Shift');
     }, 1000);
     var name = 'TextEditor.Key';
     var references = new WeakMap();
@@ -202,7 +211,12 @@
         var command,
             map = getReference($),
             v;
-        map.push(e.key); // Add current key to the queue
+        // Make the `Alt`, `Control`, and `Shift` keys sticky (does not require the user to release all keys first to repeat or change the current key combination).
+        map[e.altKey ? 'push' : 'pull']('Alt');
+        map[e.ctrlKey ? 'push' : 'pull']('Control');
+        map[e.shiftKey ? 'push' : 'pull']('Shift');
+        // Add the actual key to the queue. Don’t worry, this will not mistakenly add a key that already exists in the queue.
+        map.push(e.key);
         $._event = e;
         if (command = map.command()) {
             v = map.fire(command);
@@ -213,14 +227,14 @@
                 console.warn('Unknown command: `' + command + '`');
             }
         }
-        bounce(map); // Reset all key(s) after 1 second idle
+        bounce(map, e); // Reset all key(s) after 1 second idle.
     }
 
     function onKeyUp(e) {
         var $ = this,
             map = getReference($);
         $._event = e;
-        map.pull(e.key); // Reset current key
+        map.pull(e.key); // Reset current key.
     }
 
     function setReference(key, value) {
@@ -240,21 +254,8 @@
         !isFunction($$.k) && ($$.k = function (join) {
             var $ = this,
                 map = getReference($),
-                key = map + "",
-                keys;
-            if (isSet(join) && '-' !== join) {
-                keys = "" !== key ? key.split(/-(?!$)/) : [];
-                if (false !== join) {
-                    return keys.join(join);
-                }
-            }
-            if (false === join) {
-                if ('-' === key) {
-                    return [key];
-                }
-                return keys;
-            }
-            return key;
+                keys = map.toArray();
+            return false === join ? keys : keys.join(join || '-');
         });
         !isFunction($$.key) && ($$.key = function (key, of) {
             var $ = this;
