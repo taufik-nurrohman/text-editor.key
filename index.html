@@ -5,7 +5,7 @@
     <meta content="#000" name="theme-color">
     <meta content="width=device-width" name="viewport">
     <meta content="Provides a feature to easily interact with the keyboard keys." name="description">
-    <title>Text Editor Key 1.0.9</title>
+    <title>Text Editor Key 1.0.10</title>
     <link href="../layout/index.min.css" rel="stylesheet">
     <style>
       body {
@@ -18,7 +18,7 @@
   <body>
     <header>
       <hgroup>
-        <h1><a href="../text-editor/index.html#extensions">&laquo;</a> Text Editor Key 1.0.9</h1>
+        <h1><a href="../text-editor/index.html#extensions">&laquo;</a> Text Editor Key 1.0.10</h1>
         <p>This extension provides a feature to easily interact with the keyboard keys.</p>
       </hgroup>
     </header>
@@ -87,18 +87,18 @@ editor.key('Control-i', function () {
       <h2 id="methods"><a href="#methods">#</a> Methods</h2>
       <h3>Instance Methods</h3>
       <h4><code>editor.command(command, of)</code></h4>
-      <p>Add a command to be used later by the <code>editor.key()</code> method.</p>
+      <p>Adds a command to be used later by the <code>editor.key()</code> method.</p>
       <pre><code>editor.command('bold', function () {
     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
     return false; // Prevent normal keyboard behavior by returning `false`
 });</code></pre>
       <h4><code>editor.k(join = '-')</code></h4>
-      <p>Return the current key combination.</p>
+      <p>Returns the current key combination.</p>
       <pre><code>console.log(editor.k());
 console.log(editor.k('\n'));
 console.log(editor.k(false));</code></pre>
       <h4><code>editor.key(key, of)</code></h4>
-      <p>Add a command that will be executed when a certain keyboard key combination is pressed.</p>
+      <p>Adds a command that will be executed when a certain keyboard key combination is pressed.</p>
       <pre><code>editor.key('Control-b', 'bold'); // This will execute `editor.commands.bold()` if exists</code></pre>
       <pre><code>editor.key('Control-b', function () {
     this.wrap('&lt;b&gt;', '&lt;/b&gt;');

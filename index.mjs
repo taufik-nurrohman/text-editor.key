@@ -5,11 +5,12 @@ import {isFunction, isSet} from '@taufik-nurrohman/is';
 import {offEventDefault, offEventPropagation} from '@taufik-nurrohman/event';
 
 const bounce = debounce((map, e) => {
-    // Remove all keys
+    // Remove all key(s)
     map.pull();
-    // Make the `Alt`, `Control`, and `Shift` keys sticky (does not require the user to release all keys first to repeat or change the current key combination).
+    // Make the `Alt`, `Control`, `Meta`, and `Shift` key(s) sticky (does not require the user to release all key(s) first to repeat or change the current key combination).
     e.altKey && map.push('Alt');
     e.ctrlKey && map.push('Control');
+    e.metaKey && map.push('Meta');
     e.shiftKey && map.push('Shift');
 }, 1000);
 
@@ -27,31 +28,34 @@ function letReference(key) {
 function onBlur(e) {
     let $ = this,
         map = getReference($);
-    $._event = e;
     map.pull(); // Reset all key(s)
 }
 
 function onInput(e) {
-    onBlur.call(this, e);
+    let $ = this,
+        key = e.data,
+        map = getReference($);
+    key && map.pull(key);
 }
 
 function onKeyDown(e) {
-    let $ = this;
-    let command, map = getReference($), v;
-    // Make the `Alt`, `Control`, and `Shift` keys sticky (does not require the user to release all keys first to repeat or change the current key combination).
+    let $ = this, command, v,
+        key = e.key,
+        map = getReference($);
+    // Make the `Alt`, `Control`, `Meta`, and `Shift` key(s) sticky (does not require the user to release all key(s) first to repeat or change the current key combination).
     map[e.altKey ? 'push' : 'pull']('Alt');
     map[e.ctrlKey ? 'push' : 'pull']('Control');
+    map[e.metaKey ? 'push' : 'pull']('Meta');
     map[e.shiftKey ? 'push' : 'pull']('Shift');
     // Add the actual key to the queue. Don’t worry, this will not mistakenly add a key that already exists in the queue.
-    map.push(e.key);
-    $._event = e;
+    key && map.push(key);
     if (command = map.command()) {
         v = map.fire(command);
         if (false === v) {
             offEventDefault(e);
             offEventPropagation(e);
         } else if (null === v) {
-            console.warn('Unknown command: `' + command + '`');
+            console.warn('Unknown command:', command);
         }
     }
     bounce(map, e); // Reset all key(s) after 1 second idle.
@@ -59,9 +63,9 @@ function onKeyDown(e) {
 
 function onKeyUp(e) {
     let $ = this,
+        key = e.key,
         map = getReference($);
-    $._event = e;
-    map.pull(e.key); // Reset current key.
+    key && map.pull(key); // Reset current key.
 }
 
 function setReference(key, value) {

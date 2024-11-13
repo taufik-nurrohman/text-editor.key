@@ -117,20 +117,20 @@ block content
       = ' Methods'
     h3 Instance Methods
     h4: code editor.command(command, of)
-    p Add a command to be used later by the #[code editor.key()] method.
+    p Adds a command to be used later by the #[code editor.key()] method.
     pre: code
       | editor.command('bold', function () {
       |     this.wrap('&lt;b&gt;', '&lt;/b&gt;');
       |     return false; // Prevent normal keyboard behavior by returning `false`
       | });
     h4: code editor.k(join = '-')
-    p Return the current key combination.
+    p Returns the current key combination.
     pre: code
       | console.log(editor.k());
       | console.log(editor.k('\n'));
       | console.log(editor.k(false));
     h4: code editor.key(key, of)
-    p Add a command that will be executed when a certain keyboard key combination is pressed.
+    p Adds a command that will be executed when a certain keyboard key combination is pressed.
     pre: code
       | editor.key('Control-b', 'bold'); // This will execute `editor.commands.bold()` if exists
     pre: code
