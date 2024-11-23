@@ -73,17 +73,10 @@ function onPutDown(e) {
         key = e.data,
         map = getReference($);
     if (isString(key) && 1 === toCount(key)) {
+        // Having 1 printable character to put will discard the other(s)
+        map.toArray().forEach(k => isString(k) && 1 === toCount(k) && map.pull(k));
+        // Put the current printable character to the list
         map.push(key);
-    }
-}
-
-// Partial mobile support
-function onPutUp(e) {
-    let $ = this,
-        key = e.data,
-        map = getReference($);
-    if (isString(key) && 1 === toCount(key)) {
-        map.pull(key);
     }
 }
 
@@ -116,7 +109,6 @@ function attach() {
     $.on('key.down', onKeyDown);
     $.on('key.up', onKeyUp);
     $.on('put.down', onPutDown);
-    $.on('put.up', onPutUp);
     return setReference($, map), $;
 }
 
@@ -129,7 +121,6 @@ function detach() {
     $.off('key.down', onKeyDown);
     $.off('key.up', onKeyUp);
     $.off('put.down', onPutDown);
-    $.off('put.up', onPutUp);
     return letReference($), $;
 }
 
