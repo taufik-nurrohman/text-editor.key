@@ -1,8 +1,10 @@
 import Key from '@taufik-nurrohman/key';
+
 import {debounce} from '@taufik-nurrohman/tick';
 import {fromStates} from '@taufik-nurrohman/from';
-import {isFunction, isSet} from '@taufik-nurrohman/is';
+import {isFunction, isSet, isString} from '@taufik-nurrohman/is';
 import {offEventDefault, offEventPropagation} from '@taufik-nurrohman/event';
+import {toCount} from '@taufik-nurrohman/to';
 
 const bounce = debounce((map, e) => {
     // Remove all key(s)
@@ -29,13 +31,6 @@ function onBlur(e) {
     let $ = this,
         map = getReference($);
     map.pull(); // Reset all key(s)
-}
-
-function onInput(e) {
-    let $ = this,
-        key = e.data,
-        map = getReference($);
-    key && map.pull(key);
 }
 
 function onKeyDown(e) {
@@ -68,6 +63,33 @@ function onKeyUp(e) {
     key && map.pull(key); // Reset current key.
 }
 
+// Partial mobile support
+function onPutDown(e) {
+    let $ = this, command, v,
+        key = e.data,
+        map = getReference($);
+    if (isString(key) && 1 === toCount(key)) {
+        map.push(key);
+    }
+    if (command = map.command()) {
+        v = map.fire(command);
+        if (false === v) {
+            offEventDefault(e);
+            offEventPropagation(e);
+        } else if (null === v) {
+            console.warn('Unknown command:', command);
+        }
+    }
+    bounce(map, e);
+}
+
+function onPutUp(e) {
+    let $ = this,
+        key = e.data,
+        map = getReference($);
+    key && map.pull(key);
+}
+
 function setReference(key, value) {
     return references.set(key, value);
 }
@@ -93,9 +115,10 @@ function attach() {
         return ($.keys[key] = of), $;
     });
     $.on('blur', onBlur);
-    $.on('input', onInput);
     $.on('key.down', onKeyDown);
     $.on('key.up', onKeyUp);
+    $.on('put.down', onPutDown);
+    $.on('put.up', onPutUp);
     return setReference($, map), $;
 }
 
@@ -104,9 +127,10 @@ function detach() {
         map = getReference($);
     map.pull();
     $.off('blur', onBlur);
-    $.off('input', onInput);
     $.off('key.down', onKeyDown);
     $.off('key.up', onKeyUp);
+    $.off('put.down', onPutDown);
+    $.off('put.up', onPutUp);
     return letReference($), $;
 }
 

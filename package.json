@@ -8,7 +8,8 @@
     "@taufik-nurrohman/is": "*",
     "@taufik-nurrohman/key": "*",
     "@taufik-nurrohman/text-editor": "*",
-    "@taufik-nurrohman/tick": "*"
+    "@taufik-nurrohman/tick": "*",
+    "@taufik-nurrohman/to": "*"
   },
   "description": "Provides a feature to easily interact with the keyboard keys.",
   "devDependencies": {
@@ -46,5 +47,5 @@
   "scripts": {
     "pack": "pack --clean=false --from=.factory --js-format=umd --js-name=TextEditor.Key --js-top='%(js.license)' --mjs=true --to=."
   },
-  "version": "1.0.10"
+  "version": "1.0.11"
 }

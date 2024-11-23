@@ -207,13 +207,6 @@
         map.pull(); // Reset all key(s)
     }
 
-    function onInput(e) {
-        var $ = this,
-            key = e.data,
-            map = getReference($);
-        key && map.pull(key);
-    }
-
     function onKeyDown(e) {
         var $ = this,
             command,
@@ -245,6 +238,34 @@
             map = getReference($);
         key && map.pull(key); // Reset current key.
     }
+    // Partial mobile support
+    function onPutDown(e) {
+        var $ = this,
+            command,
+            v,
+            key = e.data,
+            map = getReference($);
+        if (isString(key) && 1 === toCount(key)) {
+            map.push(key);
+        }
+        if (command = map.command()) {
+            v = map.fire(command);
+            if (false === v) {
+                offEventDefault(e);
+                offEventPropagation(e);
+            } else if (null === v) {
+                console.warn('Unknown command:', command);
+            }
+        }
+        bounce(map, e);
+    }
+
+    function onPutUp(e) {
+        var $ = this,
+            key = e.data,
+            map = getReference($);
+        key && map.pull(key);
+    }
 
     function setReference(key, value) {
         return references.set(key, value);
@@ -271,9 +292,10 @@
             return $.keys[key] = of, $;
         });
         $.on('blur', onBlur);
-        $.on('input', onInput);
         $.on('key.down', onKeyDown);
         $.on('key.up', onKeyUp);
+        $.on('put.down', onPutDown);
+        $.on('put.up', onPutUp);
         return setReference($, map), $;
     }
 
@@ -282,9 +304,10 @@
             map = getReference($);
         map.pull();
         $.off('blur', onBlur);
-        $.off('input', onInput);
         $.off('key.down', onKeyDown);
         $.off('key.up', onKeyUp);
+        $.off('put.down', onPutDown);
+        $.off('put.up', onPutUp);
         return letReference($), $;
     }
     var index_js = {
