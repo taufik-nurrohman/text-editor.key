@@ -252,7 +252,7 @@
 
     function attach() {
         var $ = this;
-        var $$ = $.constructor.prototype;
+        var $$ = $.constructor._;
         var map = new Key($);
         $.commands = _fromStates($.commands = map.commands, $.state.commands || {});
         $.keys = _fromStates($.keys = map.keys, $.state.keys || {});

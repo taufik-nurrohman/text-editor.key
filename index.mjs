@@ -74,7 +74,7 @@ function setReference(key, value) {
 
 function attach() {
     const $ = this;
-    const $$ = $.constructor.prototype;
+    const $$ = $.constructor._;
     const map = new Key($);
     $.commands = fromStates($.commands = map.commands, $.state.commands || {});
     $.keys = fromStates($.keys = map.keys, $.state.keys || {});
