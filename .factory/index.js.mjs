@@ -1,6 +1,6 @@
 import Key from '@taufik-nurrohman/key';
 
-import {debounce} from '@taufik-nurrohman/tick';
+import {debounce, delay} from '@taufik-nurrohman/tick';
 import {fromStates} from '@taufik-nurrohman/from';
 import {isFunction, isSet, isString} from '@taufik-nurrohman/is';
 import {offEventDefault, offEventPropagation} from '@taufik-nurrohman/event';
@@ -33,6 +33,10 @@ function onBlur(e) {
     map.pull(); // Reset all key(s)
 }
 
+function onFocus(e) {
+    onBlur.call(this, e);
+}
+
 function onKeyDown(e) {
     let $ = this, command, v,
         key = e.key,
@@ -63,33 +67,6 @@ function onKeyUp(e) {
     key && map.pull(key); // Reset current key.
 }
 
-// Partial mobile support
-function onPutDown(e) {
-    let $ = this, command, v,
-        key = e.data,
-        map = getReference($);
-    if (isString(key) && 1 === toCount(key)) {
-        map.push(key);
-    }
-    if (command = map.command()) {
-        v = map.fire(command);
-        if (false === v) {
-            offEventDefault(e);
-            offEventPropagation(e);
-        } else if (null === v) {
-            console.warn('Unknown command:', command);
-        }
-    }
-    bounce(map, e);
-}
-
-function onPutUp(e) {
-    let $ = this,
-        key = e.data,
-        map = getReference($);
-    key && map.pull(key);
-}
-
 function setReference(key, value) {
     return references.set(key, value);
 }
@@ -115,10 +92,9 @@ function attach() {
         return ($.keys[key] = of), $;
     });
     $.on('blur', onBlur);
+    $.on('focus', onFocus);
     $.on('key.down', onKeyDown);
     $.on('key.up', onKeyUp);
-    $.on('put.down', onPutDown);
-    $.on('put.up', onPutUp);
     return setReference($, map), $;
 }
 
@@ -127,10 +103,9 @@ function detach() {
         map = getReference($);
     map.pull();
     $.off('blur', onBlur);
+    $.off('focus', onFocus);
     $.off('key.down', onKeyDown);
     $.off('key.up', onKeyUp);
-    $.off('put.down', onPutDown);
-    $.off('put.up', onPutUp);
     return letReference($), $;
 }
 
