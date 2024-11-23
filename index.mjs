@@ -67,6 +67,26 @@ function onKeyUp(e) {
     key && map.pull(key); // Reset current key.
 }
 
+// Partial mobile support
+function onPutDown(e) {
+    let $ = this,
+        key = e.data,
+        map = getReference($);
+    if (isString(key) && 1 === toCount(key)) {
+        map.push(key);
+    }
+}
+
+// Partial mobile support
+function onPutUp(e) {
+    let $ = this,
+        key = e.data,
+        map = getReference($);
+    if (isString(key) && 1 === toCount(key)) {
+        map.pull(key);
+    }
+}
+
 function setReference(key, value) {
     return references.set(key, value);
 }
@@ -95,6 +115,8 @@ function attach() {
     $.on('focus', onFocus);
     $.on('key.down', onKeyDown);
     $.on('key.up', onKeyUp);
+    $.on('put.down', onPutDown);
+    $.on('put.up', onPutUp);
     return setReference($, map), $;
 }
 
@@ -106,6 +128,8 @@ function detach() {
     $.off('focus', onFocus);
     $.off('key.down', onKeyDown);
     $.off('key.up', onKeyUp);
+    $.off('put.down', onPutDown);
+    $.off('put.up', onPutUp);
     return letReference($), $;
 }
 
