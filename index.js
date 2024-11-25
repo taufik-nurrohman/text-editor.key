@@ -211,7 +211,7 @@
         onBlur.call(this, e);
     }
 
-    function onPutDownOrKeyDown(e) {
+    function onKeyDownOrPutDown(e) {
         var map = getReference(this),
             command,
             v,
@@ -258,7 +258,7 @@
         bounce(map, e); // Reset all key(s) after 1 second idle.
     }
 
-    function onPutUpOrKeyUp(e) {
+    function onKeyUpOrPutUp(e) {
         var map = getReference(this),
             data = e.data,
             inputType = e.inputType,
@@ -313,10 +313,10 @@
         });
         $.on('blur', onBlur);
         $.on('focus', onFocus);
-        $.on('key.down', onPutDownOrKeyDown);
-        $.on('key.up', onPutUpOrKeyUp);
-        $.on('put.down', onPutDownOrKeyDown);
-        $.on('put.up', onPutUpOrKeyUp);
+        $.on('key.down', onKeyDownOrPutDown);
+        $.on('key.up', onKeyUpOrPutUp);
+        $.on('put.down', onKeyDownOrPutDown);
+        $.on('put.up', onKeyUpOrPutUp);
         return setReference($, map), $;
     }
 
@@ -326,10 +326,10 @@
         map.pull();
         $.off('blur', onBlur);
         $.off('focus', onFocus);
-        $.off('key.down', onPutDownOrKeyDown);
-        $.off('key.up', onPutUpOrKeyUp);
-        $.off('put.down', onPutDownOrKeyDown);
-        $.off('put.up', onPutUpOrKeyUp);
+        $.off('key.down', onKeyDownOrPutDown);
+        $.off('key.up', onKeyUpOrPutUp);
+        $.off('put.down', onKeyDownOrPutDown);
+        $.off('put.up', onKeyUpOrPutUp);
         return letReference($), $;
     }
     var index_js = {
