@@ -37,17 +37,34 @@ function onFocus(e) {
     onBlur.call(this, e);
 }
 
-function onKeyDown(e) {
-    let $ = this, command, v,
-        key = e.key,
-        map = getReference($);
-    // Make the `Alt`, `Control`, `Meta`, and `Shift` key(s) sticky (does not require the user to release all key(s) first to repeat or change the current key combination).
-    map[e.altKey ? 'push' : 'pull']('Alt');
-    map[e.ctrlKey ? 'push' : 'pull']('Control');
-    map[e.metaKey ? 'push' : 'pull']('Meta');
-    map[e.shiftKey ? 'push' : 'pull']('Shift');
-    // Add the actual key to the queue. Don’t worry, this will not mistakenly add a key that already exists in the queue.
-    key && map.push(key);
+function onPutDownOrKeyDown(e) {
+    let map = getReference(this), command, v,
+        {data, inputType, key, type} = e;
+    if ('keydown' === type) {
+        // Make the `Alt`, `Control`, `Meta`, and `Shift` key(s) sticky (does not require the user to release all key(s) first to repeat or change the current key combination).
+        map[e.altKey ? 'push' : 'pull']('Alt');
+        map[e.ctrlKey ? 'push' : 'pull']('Control');
+        map[e.metaKey ? 'push' : 'pull']('Meta');
+        map[e.shiftKey ? 'push' : 'pull']('Shift');
+        // Add the actual key to the queue. Don’t worry, this will not mistakenly add a key that already exists in the queue.
+        key && map.push(key);
+    } else {
+        if ('deleteContentBackward' === inputType) {
+            map.pull().push('Backspace'); // Simulate `Backspace` key
+        } else if ('deleteContentForward' === inputType) {
+            map.pull().push('Delete'); // Simulate `Delete` key
+        } else if ('deleteWordBackward' === inputType) {
+            map.pull().push('Control').push('Backspace'); // Simulate `Control-Backspace` keys
+        } else if ('deleteWordForward' === inputType) {
+            map.pull().push('Control').push('Delete'); // Simulate `Control-Delete` keys
+        } else if ('insertLineBreak' === inputType) {
+            map.pull().push('Enter'); // Simulate `Enter` key
+        } else if ('insertText' === inputType && data) {
+            // One character at a time
+            map.toArray().forEach(key => 1 === toCount(key) && map.pull(key));
+            map.push(data);
+        }
+    }
     if (command = map.command()) {
         v = map.fire(command);
         if (false === v) {
@@ -60,23 +77,29 @@ function onKeyDown(e) {
     bounce(map, e); // Reset all key(s) after 1 second idle.
 }
 
-function onKeyUp(e) {
-    let $ = this,
-        key = e.key,
-        map = getReference($);
-    key && map.pull(key); // Reset current key.
-}
-
-// Partial mobile support
-function onPutDown(e) {
-    let $ = this,
-        key = e.data,
-        map = getReference($);
-    if (isString(key) && 1 === toCount(key)) {
-        // Having 1 printable character to put will discard the other(s)
-        map.toArray().forEach(k => isString(k) && 1 === toCount(k) && map.pull(k));
-        // Put the current printable character to the list
-        map.push(key);
+function onPutUpOrKeyUp(e) {
+    let map = getReference(this),
+        {data, inputType, key, type} = e;
+    if ('keyup' === type) {
+        map[e.altKey ? 'push' : 'pull']('Alt');
+        map[e.ctrlKey ? 'push' : 'pull']('Control');
+        map[e.metaKey ? 'push' : 'pull']('Meta');
+        map[e.shiftKey ? 'push' : 'pull']('Shift');
+        key && map.pull(key);
+    } else {
+        if ('deleteContentBackward' === inputType) {
+            map.pull('Backspace');
+        } else if ('deleteContentForward' === inputType) {
+            map.pull('Delete');
+        } else if ('deleteWordBackward' === inputType) {
+            map.pull('Control').pull('Backspace');
+        } else if ('deleteWordForward' === inputType) {
+            map.pull('Control').pull('Delete');
+        } else if ('insertLineBreak' === inputType) {
+            map.pull('Enter');
+        } else if ('insertText' === inputType && data) {
+            map.pull(data);
+        }
     }
 }
 
@@ -106,9 +129,10 @@ function attach() {
     });
     $.on('blur', onBlur);
     $.on('focus', onFocus);
-    $.on('key.down', onKeyDown);
-    $.on('key.up', onKeyUp);
-    $.on('put.down', onPutDown);
+    $.on('key.down', onPutDownOrKeyDown);
+    $.on('key.up', onPutUpOrKeyUp);
+    $.on('put.down', onPutDownOrKeyDown);
+    $.on('put.up', onPutUpOrKeyUp);
     return setReference($, map), $;
 }
 
@@ -118,9 +142,10 @@ function detach() {
     map.pull();
     $.off('blur', onBlur);
     $.off('focus', onFocus);
-    $.off('key.down', onKeyDown);
-    $.off('key.up', onKeyUp);
-    $.off('put.down', onPutDown);
+    $.off('key.down', onPutDownOrKeyDown);
+    $.off('key.up', onPutUpOrKeyUp);
+    $.off('put.down', onPutDownOrKeyDown);
+    $.off('put.up', onPutUpOrKeyUp);
     return letReference($), $;
 }
 
